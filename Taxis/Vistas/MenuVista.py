@@ -240,9 +240,17 @@ class MenuVista:
         Label(self.toplevel_usuarios_add, text="Contraseña").grid(row=2, column=0, padx=40, pady=5)
         password = ttk.Entry(self.toplevel_usuarios_add, validate="key", validatecommand=(validacion_limite, '%P', 20))
         password.grid(row=2, column=1, padx=40, pady=5)
+
+        Label(self.toplevel_socios_add, text="Rol").grid(row=3, column=0, padx = 40, pady = 5)
+        lista_rol = ["Seleccionar...", "1", "2", "3"]
+        # Debe rellenar la lista con los roles caracteristicos
         
-        ttk.Button(self.toplevel_usuarios_add, text="Agregar").grid(row=3, column=0, padx=40, pady=(10, 25))
-        ttk.Button(self.toplevel_usuarios_add, text="Volver", command= lambda : self.cerrar_toplevel(self.toplevel_usuarios_add)).grid(row=3, column=1, padx=40, pady=(10, 25))
+        status_combo = ttk.Combobox(self.toplevel_socios_add, values=lista_rol)
+        status_combo.set(lista_status[0])
+        status_combo.grid(row=3, column=1)
+        
+        ttk.Button(self.toplevel_usuarios_add, text="Agregar").grid(row=4, column=0, padx=40, pady=(10, 25))
+        ttk.Button(self.toplevel_usuarios_add, text="Volver", command= lambda : self.cerrar_toplevel(self.toplevel_usuarios_add)).grid(row=4, column=1, padx=40, pady=(10, 25))
     
     def editar_data_usuarios(self):
         # pedir seleccion de tablas
@@ -268,9 +276,17 @@ class MenuVista:
         password.grid(row=3, column=1, padx=40, pady=5)
         Label(self.toplevel_usuarios_add, text="Data seleccionada = ").grid(row=4, column=0, padx = 40, pady = 5)
         Label(self.toplevel_usuarios_add, text=data_old[1], relief="sunken").grid(row=4, column=1, padx=40, pady=5)
+
+        Label(self.toplevel_socios_add, text="Rol").grid(row=5, column=0, padx = 40, pady = 5)
+        lista_rol = ["Seleccionar...", "1", "2", "3"]
+        # Debe rellenar la lista con los roles caracteristicos
         
-        ttk.Button(self.toplevel_usuarios_add, text="Agregar").grid(row=5, column=0, padx=40, pady=(10, 25))
-        ttk.Button(self.toplevel_usuarios_add, text="Volver", command= lambda : self.cerrar_toplevel(self.toplevel_usuarios_add)).grid(row=5, column=1, padx=40, pady=(10, 25))
+        status_combo = ttk.Combobox(self.toplevel_socios_add, values=lista_rol)
+        status_combo.set(lista_status[0])
+        status_combo.grid(row=5, column=1)
+        
+        ttk.Button(self.toplevel_usuarios_add, text="Agregar").grid(row=6, column=0, padx=40, pady=(10, 25))
+        ttk.Button(self.toplevel_usuarios_add, text="Volver", command= lambda : self.cerrar_toplevel(self.toplevel_usuarios_add)).grid(row=6, column=1, padx=40, pady=(10, 25))
     
     def generar_data_socios(self):
         # generar toplevel
