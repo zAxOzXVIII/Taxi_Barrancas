@@ -1,14 +1,14 @@
 from Controladores.controlador import *
 
 from tkinter import ttk, Label, Toplevel, END, CENTER, NO
-from tkinter import font
+from tkinter import font, messagebox
 from tkcalendar import DateEntry
 
 class MenuVista:
 
     def __init__(self, window, data):
         self.window=window
-        self.usuarioControlador=UsuarioControlador
+        self.usuarioControlador=UsuarioControlador()
         self.mainView(data)
 
     def mainView(self, data):
@@ -46,7 +46,7 @@ class MenuVista:
         toplevel.destroy()
     
     def set_column_width(self, treeview, column_index, width):
-        treeview.column(column_index, width=width, minwidth=width, stretch= NO, anchor="center")
+        treeview.column(column_index, width=width, minwidth=width, stretch= NO, anchor="w")
     
     def llenar_fila_prueba(self, treeview, valores = (), texto = "1"):
         treeview.insert('', 'end', text=texto, values=valores)
@@ -54,9 +54,16 @@ class MenuVista:
     def ajustar_ancho_columnas(self, treeview):
         for column in treeview["columns"]:
             column_width = max(
-                font.Font().measure(treeview.set(child, column)) for child in treeview.get_children('')
+                font.Font().measure(treeview.set(child, column)) for child in treeview.get_children()
                 )
-            self.set_column_width(treeview, column, column_width + 20)
+            self.set_column_width(treeview, column, column_width + 30)
+    
+    def borrar_data(self):
+        if messagebox.askyesno("Pregunta del sistema", "Estas seguro de eliminar esta fila"):
+            funcion_delete = ""
+        else: 
+            messagebox.showinfo("Mensaje del sistema", "Se ha corregido la accion")
+            return
     
     def validar_numerico(self, text, limit):
         if text.isdigit() and len(text) <= int(limit):
@@ -82,21 +89,30 @@ class MenuVista:
         self.table_users.grid(row=1, column=0, rowspan=3)
         self.table_users["columns"]=("c0", "c1", "c2")
         # cabeceras de las columnas
-        self.table_users.heading(column="c0", text="Data 1")
-        self.table_users.heading(column="c1", text="Data 2")
+        self.table_users.heading(column="c0", text="Usuario")
+        self.table_users.heading(column="c1", text="Contraseña")
         self.table_users.heading(column="c2", text="ROL")
-        # llenar columna !!
-        self.llenar_fila_prueba(self.table_users, ("Juanito1", "12345", "1"))
+        # llenar data de la tabla
+        self.getUsers()
         # ajustar width de columnas
         self.ajustar_ancho_columnas(self.table_users)
+        
         self.table_users.column("#0", width=35, minwidth=35, stretch=NO)
         # buttons
         ttk.Button(self.window, text="Crear usuario", command = self.generar_data_usuarios, state="normal" if data_rol == 1 or data_rol == 2 else "disabled").grid(row=1, column=1) #Toplevel
-        ttk.Button(self.window, text="Eliminar usuario", state="normal" if data_rol == 1 or data_rol == 2 else "disabled").grid(row=2, column=1)
+        ttk.Button(self.window, text="Eliminar usuario", state="normal" if data_rol == 1 or data_rol == 2 else "disabled", command = self.borrar_data).grid(row=2, column=1)
         ttk.Button(self.window, text="Editar usuario", command = self.editar_data_usuarios, state="normal" if data_rol == 1 or data_rol == 2 else "disabled").grid(row=3, column=1)
         # volver
         ttk.Button(self.window, text="Volver", command= lambda : self.mainView(data_rol)).grid(row=4, column=0, columnspan=2)
-    
+        
+    def getUsers(self):
+        records=self.table_users.get_children()
+        for element in records:
+            self.table_users.delete(element)
+        data=self.usuarioControlador.seleccionarUsuariosC()
+        for usuario in data:
+            self.table_users.insert('', 'end', text=usuario[0], values=(usuario[1],usuario[2],usuario[3]))
+
     def config_socios_interfaz(self, data_rol):
         # limpiar pantalla
         self.limpiar_pantalla_window()
@@ -106,12 +122,12 @@ class MenuVista:
         self.table_socios = ttk.Treeview(self.window, height=10)
         self.table_socios.grid(row=1, column=0, columnspan=3)
         self.table_socios["columns"]=("c0", "c1", "c2", "c3", "c4", "c5")
-        self.table_socios.heading(column="c0", text="Data 1")
-        self.table_socios.heading(column="c1", text="Data 2")
-        self.table_socios.heading(column="c2", text="Data 3")
-        self.table_socios.heading(column="c3", text="Data 4")
-        self.table_socios.heading(column="c4", text="Data 5")
-        self.table_socios.heading(column="c5", text="Data 6")
+        self.table_socios.heading(column="c0", text="Nombre")
+        self.table_socios.heading(column="c1", text="Apellido")
+        self.table_socios.heading(column="c2", text="Cedula")
+        self.table_socios.heading(column="c3", text="Telefono")
+        self.table_socios.heading(column="c4", text="Fecha de Ingreso")
+        self.table_socios.heading(column="c5", text="Estatus")
         # llenar columna !!
         self.llenar_fila_prueba(self.table_socios, ("Juanito1", "12345", "Pedrito 75", "Juarez", "Pizza", "2222"))
         # ajustar width de columnas
@@ -119,7 +135,7 @@ class MenuVista:
         self.table_socios.column("#0", width=35, minwidth=35, stretch=NO)
         # buttons
         ttk.Button(self.window, text="Crear socios", state="normal" if data_rol == 1 or data_rol == 2 else "disabled", command = self.generar_data_socios).grid(row=2, column=0) #Toplevel
-        ttk.Button(self.window, text="Eliminar socios", state="normal" if data_rol == 1 or data_rol == 2 else "disabled").grid(row=2, column=1)
+        ttk.Button(self.window, text="Eliminar socios", state="normal" if data_rol == 1 or data_rol == 2 else "disabled", command = self.borrar_data).grid(row=2, column=1)
         ttk.Button(self.window, text="Editar socios", state="normal" if data_rol == 1 or data_rol == 2 else "disabled", command = self.editar_data_socios).grid(row=2, column=2)
         # volver
         ttk.Button(self.window, text="Volver", command= lambda : self.mainView(data_rol)).grid(row=3, column=0, columnspan=3)
@@ -133,12 +149,12 @@ class MenuVista:
         self.table_vehiculos = ttk.Treeview(self.window, height=10)
         self.table_vehiculos.grid(row=1, column=0, columnspan=3)
         self.table_vehiculos["columns"]=("c0", "c1", "c2", "c3", "c4", "c5")
-        self.table_vehiculos.heading(column="c0", text="Data 1")
-        self.table_vehiculos.heading(column="c1", text="Data 2")
-        self.table_vehiculos.heading(column="c2", text="Data 3")
-        self.table_vehiculos.heading(column="c3", text="Data 4")
-        self.table_vehiculos.heading(column="c4", text="Data 5")
-        self.table_vehiculos.heading(column="c5", text="Data 6")
+        self.table_vehiculos.heading(column="c0", text="Marca")
+        self.table_vehiculos.heading(column="c1", text="Modelo")
+        self.table_vehiculos.heading(column="c2", text="Año")
+        self.table_vehiculos.heading(column="c3", text="Placa")
+        self.table_vehiculos.heading(column="c4", text="ID Socio")
+        self.table_vehiculos.heading(column="c5", text="Disponible")
         # llenar columna !!
         self.llenar_fila_prueba(self.table_vehiculos, ("Juanito1", "12345", "Pedrito 75", "Juarez", "Pizza", "2222"))
         # ajustar width de columnas
@@ -146,7 +162,7 @@ class MenuVista:
         self.table_vehiculos.column("#0", width=35, minwidth=35, stretch=NO)
         # buttons
         ttk.Button(self.window, text="Crear vehiculos", state="normal" if data_rol == 1 or data_rol == 2 else "disabled", command = self.generar_data_vehiculos).grid(row=2, column=0) #Toplevel
-        ttk.Button(self.window, text="Eliminar vehiculos", state="normal" if data_rol == 1 or data_rol == 2 else "disabled").grid(row=2, column=1)
+        ttk.Button(self.window, text="Eliminar vehiculos", state="normal" if data_rol == 1 or data_rol == 2 else "disabled", command = self.borrar_data).grid(row=2, column=1)
         ttk.Button(self.window, text="Editar vehiculos", state="normal" if data_rol == 1 or data_rol == 2 else "disabled", command = self.editar_data_vehiculos).grid(row=2, column=2)
         # volver
         ttk.Button(self.window, text="Volver", command= lambda : self.mainView(data_rol)).grid(row=3, column=0, columnspan=3)
@@ -160,13 +176,13 @@ class MenuVista:
         self.table_clientes = ttk.Treeview(self.window, height=10)
         self.table_clientes.grid(row=1, column=0, columnspan=3)
         self.table_clientes["columns"]=("c0", "c1", "c2", "c3", "c4", "c5", "c6")
-        self.table_clientes.heading(column="c0", text="Data 1")
-        self.table_clientes.heading(column="c1", text="Data 2")
-        self.table_clientes.heading(column="c2", text="Data 3")
-        self.table_clientes.heading(column="c3", text="Data 4")
-        self.table_clientes.heading(column="c4", text="Data 5")
-        self.table_clientes.heading(column="c5", text="Data 6")
-        self.table_clientes.heading(column="c6", text="Data 7")
+        self.table_clientes.heading(column="c0", text="Nombre")
+        self.table_clientes.heading(column="c1", text="Apellido")
+        self.table_clientes.heading(column="c2", text="Telefono 1")
+        self.table_clientes.heading(column="c3", text="Telefono 2")
+        self.table_clientes.heading(column="c4", text="Direccion")
+        self.table_clientes.heading(column="c5", text="Fecha ingreso")
+        self.table_clientes.heading(column="c6", text="Estatus")
         # llenar columna !!
         self.llenar_fila_prueba(self.table_clientes, ("Juanito1", "12345", "Pedrito 75", "Juarez", "Pizza", "2222", "El xocas"))
         # ajustar width de columnas
@@ -174,7 +190,7 @@ class MenuVista:
         self.table_clientes.column("#0", width=35, minwidth=35, stretch=NO)
         # buttons
         ttk.Button(self.window, text="Crear clientes", state="normal", command = self.generar_data_clientes).grid(row=2, column=0) #Toplevel
-        ttk.Button(self.window, text="Eliminar clientes", state="normal").grid(row=2, column=1)
+        ttk.Button(self.window, text="Eliminar clientes", state="normal", command = self.borrar_data).grid(row=2, column=1)
         ttk.Button(self.window, text="Editar clientes", state="normal", command = self.editar_data_clientes).grid(row=2, column=2)
         # volver
         ttk.Button(self.window, text="Volver", command= lambda : self.mainView(data_rol)).grid(row=3, column=0, columnspan=3)
@@ -189,11 +205,11 @@ class MenuVista:
         self.table_carreras.grid(row=1, column=0, rowspan=3)
         self.table_carreras["columns"]=("c0", "c1", "c2", "c3", "c4")
         self.table_carreras.heading(column="#0", text="ID")
-        self.table_carreras.heading(column="c0", text="Data 1")
-        self.table_carreras.heading(column="c1", text="Data 2")
-        self.table_carreras.heading(column="c2", text="Data 3")
-        self.table_carreras.heading(column="c3", text="Data 4")
-        self.table_carreras.heading(column="c4", text="Data 5")
+        self.table_carreras.heading(column="c0", text="ID Carro")
+        self.table_carreras.heading(column="c1", text="ID Cliente")
+        self.table_carreras.heading(column="c2", text="Fecha Carrera")
+        self.table_carreras.heading(column="c3", text="Precio")
+        self.table_carreras.heading(column="c4", text="Destino")
         # llenar columna !!
         self.llenar_fila_prueba(self.table_carreras, ("Juanito1", "12345", "Pedrito 75", "Juarez", "Pizza"))
         # ajustar width de columnas
