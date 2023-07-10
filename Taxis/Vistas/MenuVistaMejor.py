@@ -297,7 +297,7 @@ class MenuVista:
         self.tlf.grid(row=4, column=1, padx = 40, pady = 5)
         
         Label(self.toplevel_socios_add, text="Fecha ingreso").grid(row=5, column=0, padx = 40, pady = 5)
-        self.fecha = ttk.Entry(self.toplevel_socios_add, validate="key", validatecommand=(validacion_limite, "%P", 11))
+        self.fecha = DateEntry(self.toplevel_socios_add, date_pattern="y/mm/dd")
         self.fecha.grid(row=5, column=1, padx = 40, pady = 5)
         
         ttk.Button(self.toplevel_socios_add, text="Agregar", command=self.add_socio).grid(row=6, column=0, padx=40, pady=(10, 25))
