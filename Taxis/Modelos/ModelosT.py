@@ -146,14 +146,14 @@ class Socios(Conexion):
             respuesta=self.consulta(consulta,(socioId,),1)
         return respuesta
 
-    def actualizarSocio(self, socioId:int, nombre:str, apellido:str, cedula:str, telefono:str, ingreso:str):
+    def actualizarSocio(self, socioId:int, nombre:str, apellido:str, cedula:str, telefono:str, status:int):
         verificarId=self.seleccionarSocio(socioId)
         if verificarId!=[]:
             consulta="SELECT * FROM socios WHERE id!=? AND cedula=?"
             verificarCedula=self.consulta(consulta,(socioId,cedula),1)
             if verificarCedula==[]:
-                consulta="UPDATE socios SET nombre=?,apellido=?,cedula=?,telefono=?,fecha_ingreso=? WHERE id=?"
-                execute=self.consulta(consulta,(nombre,apellido,cedula,telefono,ingreso,socioId),0)
+                consulta="UPDATE socios SET nombre=?,apellido=?,cedula=?,telefono=?,status=? WHERE id=?"
+                execute=self.consulta(consulta,(nombre,apellido,cedula,telefono,status,socioId),0)
                 if type(execute)==int:
                     if execute>0:
                         respuesta=1
@@ -223,10 +223,10 @@ class Vehiculos(Conexion):
 
     def seleccionarVehiculo(self, vehiculoId:int=0):
         if vehiculoId==0:
-            consulta="SELECT v.id,v.marca,v.modelo,v.anio,v.placa,v.id_socio,CONCAT(s.nombre,' ',s.apellido),s.cedula,v.disponible FROM vehiculos AS v INNER JOIN socios AS s ON v.id_socio=s.id ORDER BY v.id_socio ASC"
+            consulta="SELECT * FROM vehiculos ORDER BY id_socio ASC"
             respuesta=self.consulta(consulta,(),1)
         else:
-            consulta="SELECT v.id,v.marca,v.modelo,v.anio,v.placa,v.id_socio,CONCAT(s.nombre,' ',s.apellido),s.cedula,v.disponible FROM vehiculos AS v INNER JOIN socios AS s ON v.id_socio=s.id WHERE v.id=? ORDER BY v.id_socio ASC"
+            consulta=f"SELECT * FROM vehiculos WHERE id='{vehiculoId}'"
             respuesta=self.consulta(consulta,(vehiculoId,),1)
         return respuesta
 
@@ -258,7 +258,7 @@ class Vehiculos(Conexion):
     def actualizarDisponibilidad(self, vehiculoId:int):
         verificarId=self.seleccionarVehiculo(vehiculoId)
         if verificarId!=[]:
-            if verificarId[0][8]==0:
+            if verificarId[0][6]==0:
                 consulta="UPDATE vehiculos SET disponible=1 WHERE id=?"
             else:
                 consulta="UPDATE vehiculos SET disponible=0 WHERE id=?"
@@ -303,7 +303,7 @@ class Clientes(Conexion):
     def crearCliente(self, nombre:str, apellido:str, telefonoUno:str, direccion:str, ingreso:str, telefonoDos:str=""):
         verificarTelefono=self.verificarTelefonoNoExista(telefonoUno)
         if verificarTelefono==[]:
-            consulta="INSER INTO clientes(nombre,apellido,telefono_uno,telefono_dos,direccion,fecha_ingreso)"
+            consulta="INSERT INTO clientes(nombre,apellido,telefono_uno,telefono_dos,direccion,fecha_ingreso,status) VALUES (?,?,?,?,?,?,1)"
             execute=self.consulta(consulta,(nombre,apellido,telefonoUno,telefonoDos,direccion,ingreso),0)
             if type(execute)==int:
                 if execute>0:
@@ -325,14 +325,14 @@ class Clientes(Conexion):
             respuesta=self.consulta(consulta,(clienteId,),1)
         return respuesta
 
-    def actualizarCliente(self, clienteId:int, nombre:str, apellido:str, telefonoUno:str, direccion:str, status:int, telefonoDos:str=""):
+    def actualizarCliente(self, clienteId:int, nombre:str, apellido:str, telefonoUno:str, direccion:str,status:str, telefonoDos:str=""):
         verificarId=self.seleccionarCliente(clienteId)
         if verificarId!=[]:
             consulta="SELECT * FROM clientes WHERE id!=? AND telefono_uno=?"
             verificarTelf=self.consulta(consulta,(clienteId,telefonoUno),1)
             if verificarTelf==[]:
                 consulta="UPDATE clientes SET nombre=?,apellido=?,telefono_uno=?,telefono_dos=?,direccion=?,status=? WHERE id=?"
-                execute=self.consulta(consulta,(nombre,apellido,telefonoUno,telefonoDos,direccion,status,clienteId))
+                execute=self.consulta(consulta,(nombre,apellido,telefonoUno,telefonoDos,direccion,status,clienteId),0)
                 if type(execute)==int:
                     if execute>0:
                         resultado=1
@@ -363,7 +363,7 @@ class Clientes(Conexion):
         return respuesta
 
     def verificarTelefonoNoExista(self, telefono:str):
-        consulta="SELECT * FROM clientes WHERE telefono=?"
+        consulta="SELECT * FROM clientes WHERE telefono_uno=?"
         return self.consulta(consulta,(telefono,),1)
 
     def verificarClienteActivo(self, clienteId:int):
@@ -382,7 +382,7 @@ class Carreras(Conexion):
             verificarCliente=self.cliente.verificarClienteActivo(clienteId)
             if verificarCliente!=[]:
                 consulta="INSERT INTO carreras(id_carro,id_cliente,fecha_carrera,precio,destino) VALUES (?,?,?,?,?)"
-                execute=self.consulta(consulta,(carroId,clienteId,fechaCarrera,precio,destino))
+                execute=self.consulta(consulta,(carroId,clienteId,fechaCarrera,precio,destino),0)
                 if type(execute)==int:
                     if execute>0:
                         respuesta=1
@@ -399,33 +399,29 @@ class Carreras(Conexion):
 
     def seleccionarCarreras(self, carreraId:int=0):
         if carreraId==0:
-            consulta="SELECT ca.id,ca.id_carro,ca.id_cliente,CONCAT(c.nombre,'',c.apellido),c.telefono_uno,c.direccion,ca.fecha_carrera,ca.precio,ca.destino FROM carreras as ca INNER JOIN clientes as c ON ca.id_cliente=c.id ORDER BY ca.fecha_carrera"
+            consulta="SELECT * FROM carreras"
             respuesta=self.consulta(consulta,(),1)
         else:
-            consulta="SELECT ca.id,ca.id_carro,ca.id_cliente,CONCAT(c.nombre,'',c.apellido),c.telefono_uno,c.direccion,ca.fecha_carrera,ca.precio,ca.destino FROM carreras as ca INNER JOIN clientes as c ON ca.id_cliente=c.id WHERE ca.id=?"
+            consulta="SELECT * FROM carreras WHERE id=?"
             respuesta=self.consulta(consulta,(carreraId,),1)
         return respuesta
 
-    def actualizarCarreras(self, carreraId:int, carroId:int, clienteId:int, fechaCarrera:str, precio:float, destino:str):
+    def actualizarCarreras(self, carreraId:int, carroId:int, clienteId:int, precio:float, destino:str):
         verificarId=self.seleccionarCarreras(carreraId)
         if verificarId!=[]:
-            verificarVehiculo=self.vehiculo.verificarDisponibilidadVehiculo(carroId)
-            if verificarVehiculo!=[]:
-                verificarCliente=self.cliente.verificarClienteActivo(clienteId)
-                if verificarCliente!=[]:
-                    consulta="UPDATE carreras SET id_carro=?,id_cliente=?,fecha_carrera=?,precio=?,destino=? WHERE id=?"
-                    execute=self.consulta(consulta,(carroId,clienteId,fechaCarrera,precio,destino,carreraId),0)
-                    if type(execute)==int:
-                        if execute>0:
-                            respuesta=1
-                        else:
-                            respuesta=0
+            verificarCliente=self.cliente.verificarClienteActivo(clienteId)
+            if verificarCliente!=[]:
+                consulta="UPDATE carreras SET id_carro=?,id_cliente=?,precio=?,destino=? WHERE id=?"
+                execute=self.consulta(consulta,(carroId,clienteId,precio,destino,carreraId),0)
+                if type(execute)==int:
+                    if execute>0:
+                        respuesta=1
                     else:
-                        respuesta=execute
+                        respuesta=0
                 else:
-                    respuesta="Ese clienete no está activo, verifica por favor"
+                    respuesta=execute
             else:
-                respuesta="El vehiculo no existe o no está disponible, verifica por favor"
+                respuesta="Ese clienete no está activo, verifica por favor"
         else:
             respuesta="No existe ese registro de carrera"
         return respuesta

@@ -2,7 +2,7 @@ from tkinter import ttk, Label, Toplevel, END, CENTER, NO
 from tkinter import font
 from tkinter import messagebox
 from Controladores.SesionControlador import SesionControlador
-from Vistas.MenuVista import MenuVista
+from Vistas.MenuVistaMejor import MenuVista
 
 class LoginVista:
     def __init__(self, window):

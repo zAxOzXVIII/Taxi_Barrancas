@@ -32,8 +32,8 @@ class SociosContolador(Socios):
         respuesta=super().seleccionarSocio(socioId)
         return respuesta
 
-    def actualizarSocioC(self, socioId:int, nombre:str, apellido:str, cedula:str, telefono:str, ingreso:str):
-        respuesta=super().actualizarSocio(socioId,nombre,apellido,cedula,telefono,ingreso)
+    def actualizarSocioC(self, socioId:int, nombre:str, apellido:str, cedula:str, telefono:str, status:int):
+        respuesta=super().actualizarSocio(socioId,nombre,apellido,cedula,telefono,status)
         return respuesta
 
     def eliminarSocioC(self, socioId:int):
@@ -84,7 +84,7 @@ class ClientesControlador(Clientes):
         respuesta=super().seleccionarCliente(clienteId)
         return respuesta
 
-    def actualizarCliente(self, clienteId:int, nombre:str, apellido:str, telefonoUno:str, direccion:str, status:int, telefonoDos:str=""):
+    def actualizarCliente(self, clienteId:int, nombre:str, apellido:str, telefonoUno:str, direccion:str,status:str, telefonoDos:str=""):
         respuesta=super().actualizarCliente(clienteId, nombre, apellido, telefonoUno, direccion, status, telefonoDos)
         return respuesta
 
@@ -106,8 +106,8 @@ class CarrerasControlador(Carreras):
         respuesta=super().seleccionarCarreras(carreraId)
         return respuesta
 
-    def actualizarCarreraC(self, carreraId:int, carroId:int, clienteId:int, fechaCarrera:str, precio:float, destino:str):
-        respuesta=super().actualizarCarreras(carreraId, carroId, clienteId, fechaCarrera, precio, destino)
+    def actualizarCarreraC(self, carreraId:int, carroId:int, clienteId:int, precio:float, destino:str):
+        respuesta=super().actualizarCarreras(carreraId, carroId, clienteId, precio, destino)
         return respuesta
 
     def eliminarCarreraC(self, carreraId:int):
