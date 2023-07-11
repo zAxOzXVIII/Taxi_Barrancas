@@ -7,6 +7,9 @@ class MenuVista:
 
     def __init__(self, window, data):
         self.window=window
+        # Configurando color de la raiz window
+        self.window.configure(bg="#cdd5e7")
+        # Data de modelo
         self.data=data
         self.usuarioControlador=UsuarioControlador()
         self.sociosControlador=SociosContolador()
@@ -21,21 +24,21 @@ class MenuVista:
         self.limpiar_pantalla_window()
         options = ["Configurar usuarios", "Configurar socios", "Configurar vehiculos",
                     "Configurar clientes", "Configurar carreras"]
-        Label(self.window, text=f"Bienvenido {self.data}").grid(row=0, column=0, columnspan=2, padx=50, pady=(25, 25))
+        Label(self.window, bg="#ccd4eb", text=f"Bienvenido {self.data}").grid(row=0, column=0, columnspan=2, padx=50, pady=(25, 25))
 
-        Label(self.window, text=options[0]).grid(row=1, column=0, padx=50, pady=(0, 10))
+        Label(self.window, bg="#ccd4eb", text=options[0]).grid(row=1, column=0, padx=50, pady=(0, 10))
         ttk.Button(self.window, text="Usuarios", command = lambda : self.config_usuarios_interfaz()).grid(row=1, column=1, padx=50, pady=(0, 10))
 
-        Label(self.window, text=options[1]).grid(row=2, column=0, padx=50, pady=(0, 10))
+        Label(self.window, bg="#ccd4eb", text=options[1]).grid(row=2, column=0, padx=50, pady=(0, 10))
         ttk.Button(self.window, text="Socios", command = lambda : self.config_socios_interfaz()).grid(row=2, column=1, padx=50, pady=(0, 10))
 
-        Label(self.window, text=options[2]).grid(row=3, column=0, padx=50, pady=(0, 10))
+        Label(self.window, bg="#ccd4eb", text=options[2]).grid(row=3, column=0, padx=50, pady=(0, 10))
         ttk.Button(self.window, text="Vehiculos", command = lambda : self.config_vehiculos_interfaz()).grid(row=3, column=1, padx=50, pady=(0, 10))
 
-        Label(self.window, text=options[3]).grid(row=4, column=0, padx=50, pady=(0, 10))
+        Label(self.window, bg="#ccd4eb", text=options[3]).grid(row=4, column=0, padx=50, pady=(0, 10))
         ttk.Button(self.window, text="Clientes", command = lambda:  self.config_clientes_interfaz()).grid(row=4, column=1, padx=50, pady=(0, 10))
 
-        Label(self.window, text=options[4]).grid(row=5, column=0, padx=50, pady=(0, 10))
+        Label(self.window, bg="#ccd4eb", text=options[4]).grid(row=5, column=0, padx=50, pady=(0, 10))
         ttk.Button(self.window, text="Carreras", command = lambda : self.config_carreras_interfaz()).grid(row=5, column=1, padx=50, pady=(0, 10))
 
 #FUNCIONES GENERALES
@@ -55,6 +58,7 @@ class MenuVista:
         treeview.insert('', 'end', text=texto, values=valores)
 
     def ajustar_ancho_columnas(self, treeview):
+        if len(treeview.get_children()) == 0: return
         for column in treeview["columns"]:
             column_width = max(
                 font.Font().measure(treeview.set(child, column)) for child in treeview.get_children()
@@ -87,7 +91,7 @@ class MenuVista:
     def config_usuarios_interfaz(self):
         data_rol=self.data[3]
         self.limpiar_pantalla_window()
-        Label(self.window, text="Modulo de usuarios").grid(row=0, column=0, columnspan=2)
+        Label(self.window, bg="#ccd4eb", text="Modulo de usuarios").grid(row=0, column=0, columnspan=2)
         #TABLA
         self.table_users = ttk.Treeview(self.window, height=10)
         self.table_users.grid(row=1, column=0, rowspan=3)
@@ -239,7 +243,7 @@ class MenuVista:
         # limpiar pantalla
         self.limpiar_pantalla_window()
         # widgets
-        Label(self.window, text="Modulo de socios").grid(row=0, column=0, columnspan=3)
+        Label(self.window, bg="#ccd4eb", text="Modulo de socios").grid(row=0, column=0, columnspan=3)
         # Tabla
         self.table_socios = ttk.Treeview(self.window, height=10)
         self.table_socios.grid(row=1, column=0, columnspan=3)
@@ -408,7 +412,7 @@ class MenuVista:
         # limpiar pantalla
         self.limpiar_pantalla_window()
         # widgets
-        Label(self.window, text="Modulo de vehiculos").grid(row=0, column=0, columnspan=3)
+        Label(self.window, bg="#ccd4eb", text="Modulo de vehiculos").grid(row=0, column=0, columnspan=3)
         # Tabla
         self.table_vehiculos = ttk.Treeview(self.window, height=10)
         self.table_vehiculos.grid(row=1, column=0, columnspan=3)
@@ -606,7 +610,7 @@ class MenuVista:
         # limpiar pantalla
         self.limpiar_pantalla_window()
         # widgets
-        Label(self.window, text="Modulo de clientes").grid(row=0, column=0, columnspan=3)
+        Label(self.window, bg="#ccd4eb", text="Modulo de clientes").grid(row=0, column=0, columnspan=3)
         # Tabla
         self.table_clientes = ttk.Treeview(self.window, height=10)
         self.table_clientes.grid(row=1, column=0, columnspan=3)
@@ -785,7 +789,7 @@ class MenuVista:
         data_rol=self.data[3]
         self.limpiar_pantalla_window()
         # widgets
-        Label(self.window, text="Modulo de carreras").grid(row=0, column=0, columnspan=2)
+        Label(self.window, bg="#ccd4eb", text="Modulo de carreras").grid(row=0, column=0, columnspan=2)
         # Tabla
         self.table_carreras = ttk.Treeview(self.window, height=10)
         self.table_carreras.grid(row=1, column=0, rowspan=3)
@@ -796,10 +800,11 @@ class MenuVista:
         self.table_carreras.heading(column="c2", text="Fecha Carrera")
         self.table_carreras.heading(column="c3", text="Precio")
         self.table_carreras.heading(column="c4", text="Destino")
+        # asignando data
         self.get_carreras()
         # ajustar width de columnas
         self.ajustar_ancho_columnas(self.table_carreras)
-        # ajustando columna principal
+        # ajustando columna 
         self.table_carreras.column("#0", width=35, minwidth=35, stretch=NO, anchor="w")
         # buttons
         ttk.Button(self.window, text="Crear carreras", state="normal", command = self.generar_data_carreras).grid(row=1, column=1) #Toplevel
