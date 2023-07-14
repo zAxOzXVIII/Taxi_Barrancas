@@ -9,6 +9,9 @@ class MenuVista:
         self.window=window
         # Configurando color de la raiz window
         self.window.configure(bg="#cdd5e7")
+        # configurando el resizable
+        self.window.resizable(width=True, height=False)
+        self.window.geometry("800x480")
         # Data de modelo
         self.data=data
         self.usuarioControlador=UsuarioControlador()
@@ -24,22 +27,22 @@ class MenuVista:
         self.limpiar_pantalla_window()
         options = ["Configurar usuarios", "Configurar socios", "Configurar vehiculos",
                     "Configurar clientes", "Configurar carreras"]
-        Label(self.window, bg="#ccd4eb", text=f"Bienvenido {self.data}").grid(row=0, column=0, columnspan=2, padx=50, pady=(25, 25))
+        Label(self.window, bg="#ccd4eb", text=f"Bienvenido {self.data[1]}").grid(row=0, column=0, columnspan=2, padx=160, pady=(0, 25))
 
-        Label(self.window, bg="#ccd4eb", text=options[0]).grid(row=1, column=0, padx=50, pady=(0, 10))
-        ttk.Button(self.window, text="Usuarios", command = lambda : self.config_usuarios_interfaz()).grid(row=1, column=1, padx=50, pady=(0, 10))
+        Label(self.window, bg="#ccd4eb", text=options[0]).grid(row=1, column=0, padx=(0, 0), pady=(0, 10))
+        ttk.Button(self.window, text="Usuarios", command = lambda : self.config_usuarios_interfaz()).grid(row=1, column=1, padx=(0, 185), pady=(0, 10))
 
-        Label(self.window, bg="#ccd4eb", text=options[1]).grid(row=2, column=0, padx=50, pady=(0, 10))
-        ttk.Button(self.window, text="Socios", command = lambda : self.config_socios_interfaz()).grid(row=2, column=1, padx=50, pady=(0, 10))
+        Label(self.window, bg="#ccd4eb", text=options[1]).grid(row=2, column=0, padx=(0, 0), pady=(0, 10))
+        ttk.Button(self.window, text="Socios", command = lambda : self.config_socios_interfaz()).grid(row=2, column=1, padx=(0, 185), pady=(0, 10))
 
-        Label(self.window, bg="#ccd4eb", text=options[2]).grid(row=3, column=0, padx=50, pady=(0, 10))
-        ttk.Button(self.window, text="Vehiculos", command = lambda : self.config_vehiculos_interfaz()).grid(row=3, column=1, padx=50, pady=(0, 10))
+        Label(self.window, bg="#ccd4eb", text=options[2]).grid(row=3, column=0, padx=(0, 0), pady=(0, 10))
+        ttk.Button(self.window, text="Vehiculos", command = lambda : self.config_vehiculos_interfaz()).grid(row=3, column=1, padx=(0, 185), pady=(0, 10))
 
-        Label(self.window, bg="#ccd4eb", text=options[3]).grid(row=4, column=0, padx=50, pady=(0, 10))
-        ttk.Button(self.window, text="Clientes", command = lambda:  self.config_clientes_interfaz()).grid(row=4, column=1, padx=50, pady=(0, 10))
+        Label(self.window, bg="#ccd4eb", text=options[3]).grid(row=4, column=0, padx=(0, 0), pady=(0, 10))
+        ttk.Button(self.window, text="Clientes", command = lambda:  self.config_clientes_interfaz()).grid(row=4, column=1, padx=(0, 185), pady=(0, 10))
 
-        Label(self.window, bg="#ccd4eb", text=options[4]).grid(row=5, column=0, padx=50, pady=(0, 10))
-        ttk.Button(self.window, text="Carreras", command = lambda : self.config_carreras_interfaz()).grid(row=5, column=1, padx=50, pady=(0, 10))
+        Label(self.window, bg="#ccd4eb", text=options[4]).grid(row=5, column=0, padx=(0, 0), pady=(0, 80))
+        ttk.Button(self.window, text="Carreras", command = lambda : self.config_carreras_interfaz()).grid(row=5, column=1, padx=(0, 185), pady=(0, 80))
 
 #FUNCIONES GENERALES
 
@@ -63,7 +66,7 @@ class MenuVista:
             column_width = max(
                 font.Font().measure(treeview.set(child, column)) for child in treeview.get_children()
                 )
-            self.set_column_width(treeview, column, column_width + 30)
+            self.set_column_width(treeview, column, column_width + 50)
 
     def validar_numerico(self, text, limit):
         if text.isdigit() and len(text) <= int(limit):

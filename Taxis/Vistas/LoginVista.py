@@ -1,4 +1,4 @@
-from tkinter import ttk, Label, Toplevel, END, CENTER, NO
+from tkinter import ttk, Label, END, CENTER, NO
 from tkinter import font
 from tkinter import messagebox
 from Controladores.SesionControlador import SesionControlador
@@ -10,7 +10,8 @@ class LoginVista:
         self.Sesion=SesionControlador()
         self.window = window
         self.window.title("Linea de Taxis Dos picos")
-        # self.window.geometry("320x280")
+        self.window.geometry("640x480")
+        self.window.resizable(width=False, height=False)
         # main login
         self.login_main_vista()
 
@@ -26,26 +27,26 @@ class LoginVista:
         # Configuracion de la imagen de fondo
         ancho_ventana = self.window.winfo_width()
         alto_ventana = self.window.winfo_height()
-        imagen = Image.open("Python-Projects\\Versiones de taxis\\Taxi_Barrancas-main\\Taxis\\Configuracion\\Logo_taxis.jpeg")
-        imagen = imagen.resize((300, 200), Image.LANCZOS)
+        imagen = Image.open("Taxis\\Configuracion\\Logo_taxis.jpeg")
+        imagen = imagen.resize((640, 480), Image.LANCZOS)
         fondo_imagen = ImageTk.PhotoImage(imagen)
         
         fondo = ttk.Label(self.window, image=fondo_imagen)
-        fondo.grid(row=0, column=0, sticky="nsew", rowspan=4)
+        fondo.grid(row=0, column=0, rowspan=4)
         fondo.imagen=fondo_imagen
         # Login
-        Label(self.window, text="Inicio de sesiones", bg="#ccd4eb").grid(row=0, column=0, padx=100, pady=(50, 0), sticky="nsew")
+        Label(self.window, text="Inicio de sesiones", font="32").grid(row=0, column=0, padx=200, pady=(0, 10))
         # entrys
         self.usuario = ttk.Entry(self.window)
-        self.usuario.grid(row=1, column=0, padx=100, pady=(15,5))
+        self.usuario.grid(row=1, column=0, padx=200, pady=(0, 5))
         #self.usuario.bind('<KeyRelease>', lambda event: self.validar_longitud(self.usuario))
         self.usuario.focus()
 
         self.contrasenia = ttk.Entry(self.window, show = "*")
-        self.contrasenia.grid(row=2, column=0, padx=100, pady=(5,5))
+        self.contrasenia.grid(row=2, column=0, padx=200, pady=(5,5))
         #self.contrasenia.bind('<KeyRelease>', lambda event: self.validar_longitud(self.contrasenia))
         # button
-        ttk.Button(self.window, text="Ingresar", command=self.main_menu).grid(row=3, column=0, padx=100, pady=(25,50))
+        ttk.Button(self.window, text="Ingresar", command=self.main_menu).grid(row=3, column=0, padx=200, pady=(25,50))
         # configurando ventana
         self.window.grid_rowconfigure(0, weight=1)
         self.window.grid_columnconfigure(0, weight=1)
