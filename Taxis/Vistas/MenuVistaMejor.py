@@ -97,7 +97,7 @@ class MenuVista:
         Label(self.window, bg="#ccd4eb", text="Modulo de usuarios").grid(row=0, column=0, columnspan=2)
         #TABLA
         self.table_users = ttk.Treeview(self.window, height=10)
-        self.table_users.grid(row=1, column=0, rowspan=3)
+        self.table_users.grid(row=1, column=0, rowspan=3, sticky="ew")
         self.table_users["columns"]=("c0", "c1", "c2")
         #CABECERAS DE COLUMNA
         self.table_users.heading(column="c0", text="Usuario")
@@ -249,7 +249,7 @@ class MenuVista:
         Label(self.window, bg="#ccd4eb", text="Modulo de socios").grid(row=0, column=0, columnspan=3)
         # Tabla
         self.table_socios = ttk.Treeview(self.window, height=10)
-        self.table_socios.grid(row=1, column=0, columnspan=3)
+        self.table_socios.grid(row=1, column=0, columnspan=3, sticky="ew")
         self.table_socios["columns"]=("c0", "c1", "c2", "c3", "c4", "c5")
         self.table_socios.heading(column="c0", text="Nombre")
         self.table_socios.heading(column="c1", text="Apellido")
@@ -418,7 +418,7 @@ class MenuVista:
         Label(self.window, bg="#ccd4eb", text="Modulo de vehiculos").grid(row=0, column=0, columnspan=3)
         # Tabla
         self.table_vehiculos = ttk.Treeview(self.window, height=10)
-        self.table_vehiculos.grid(row=1, column=0, columnspan=3)
+        self.table_vehiculos.grid(row=1, column=0, columnspan=4, sticky="ew")
         self.table_vehiculos["columns"]=("c0", "c1", "c2", "c3", "c4", "c5")
         self.table_vehiculos.heading(column="c0", text="Marca")
         self.table_vehiculos.heading(column="c1", text="Modelo")
@@ -616,7 +616,7 @@ class MenuVista:
         Label(self.window, bg="#ccd4eb", text="Modulo de clientes").grid(row=0, column=0, columnspan=3)
         # Tabla
         self.table_clientes = ttk.Treeview(self.window, height=10)
-        self.table_clientes.grid(row=1, column=0, columnspan=3)
+        self.table_clientes.grid(row=1, column=0, columnspan=3, sticky="ew")
         self.table_clientes["columns"]=("c0", "c1", "c2", "c3", "c4", "c5", "c6")
         self.table_clientes.heading(column="c0", text="Nombre")
         self.table_clientes.heading(column="c1", text="Apellido")
@@ -795,7 +795,7 @@ class MenuVista:
         Label(self.window, bg="#ccd4eb", text="Modulo de carreras").grid(row=0, column=0, columnspan=2)
         # Tabla
         self.table_carreras = ttk.Treeview(self.window, height=10)
-        self.table_carreras.grid(row=1, column=0, rowspan=3)
+        self.table_carreras.grid(row=1, column=0, rowspan=3, sticky="ew")
         self.table_carreras["columns"]=("c0", "c1", "c2", "c3", "c4")
         self.table_carreras.heading(column="#0", text="ID")
         self.table_carreras.heading(column="c0", text="ID Carro")
